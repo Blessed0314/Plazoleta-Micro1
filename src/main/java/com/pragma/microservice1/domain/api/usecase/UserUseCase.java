@@ -24,4 +24,9 @@ public class UserUseCase implements IUserServicePort {
         }
         userPersistencePort.saveUser(user);
     }
+
+    @Override
+    public void saveAdmin(User user) {
+        userPersistencePort.saveAdmin(user);
+    }
 }

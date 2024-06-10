@@ -4,5 +4,5 @@ import com.pragma.microservice1.domain.model.Role;
 
 public interface IRoleServicePort {
     void createDefaultRoles(String roleName);
-    void saveRol(Role role);
+    void saveRole(Role role);
 }

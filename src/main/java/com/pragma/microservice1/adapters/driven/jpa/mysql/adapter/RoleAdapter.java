@@ -4,14 +4,15 @@ import com.pragma.microservice1.adapters.driven.jpa.mysql.adapter.util.RoleConst
 import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.RoleAlreadyExistsException;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.mapper.IRoleEntityMapper;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.repository.IRoleRepository;
-import com.pragma.microservice1.domain.api.IRoleServicePort;
 import com.pragma.microservice1.domain.model.Role;
+import com.pragma.microservice1.domain.spi.IRolePersistencePort;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class RoleAdapter implements IRoleServicePort {
+public class RoleAdapter implements IRolePersistencePort {
     private final IRoleRepository roleRepository;
     private final IRoleEntityMapper roleEntityMapper;
+
     private final RoleConstructor roleConstructor= new RoleConstructor();
 
     @Override
