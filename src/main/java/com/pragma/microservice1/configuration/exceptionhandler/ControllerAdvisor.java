@@ -4,6 +4,8 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.*;
 import com.pragma.microservice1.adapters.security.exception.JwtInvalidException;
 import com.pragma.microservice1.configuration.Constants;
+import com.pragma.microservice1.domain.exception.BirthdateNotNullException;
+import com.pragma.microservice1.domain.exception.WrongAgeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,6 +88,23 @@ public class ControllerAdvisor {
         ));
     }
 
+    @ExceptionHandler(BirthdateNotNullException.class)
+    public ResponseEntity<ExceptionResponse> handleBirthdateNotNullException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(
+                Constants.FIELD_BIRTHDATE_NULL_MESSAGE,
+                HttpStatus.BAD_REQUEST.toString(),
+                LocalDateTime.now()
+        ));
+    }
+
+    @ExceptionHandler(WrongAgeException.class)
+    public ResponseEntity<ExceptionResponse> handleWrongAgeException() {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(
+                Constants.WRONG_AGE_EXCEPTION_MESSAGE,
+                HttpStatus.BAD_REQUEST.toString(),
+                LocalDateTime.now()
+        ));
+    }
 
     @ExceptionHandler(WrongRoleException.class)
     public ResponseEntity<ExceptionResponse> handleWrongRoleException() {

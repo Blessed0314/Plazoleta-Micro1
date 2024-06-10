@@ -8,3 +8,4 @@ import org.mapstruct.Mapper;
 public interface IUserRequestMapper {
     User addRequestToUser(AddUserRequest addUserRequest);
 }
+
