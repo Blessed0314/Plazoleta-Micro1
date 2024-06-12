@@ -16,6 +16,7 @@ public class UserRoleValidation {
             case "ADMIN" -> !userRepository.existsByRole(role);
             case "OWNER" -> getAuthority(authentication).equals("ADMIN");
             case "EMPLOYEE" -> getAuthority(authentication).equals("OWNER");
+            case "CLIENT" -> true;
             default -> false;
         };
     }
