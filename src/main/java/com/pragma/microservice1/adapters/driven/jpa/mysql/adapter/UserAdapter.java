@@ -52,7 +52,7 @@ public class UserAdapter implements IUserPersistencePort {
         if (existingRole.isEmpty()) {
             throw new RoleNotFoundException();
         }
-        Optional<UserEntity> existingUser = userRepository.findByEmailIgnoreCase(user.getEmail().trim());
+        Optional<UserEntity> existingUser = userRepository.findByDni(user.getDni().trim());
         if (existingUser.isPresent()) {
             throw new UserAlreadyExistsException();
         }
