@@ -1,5 +1,6 @@
 package com.pragma.microservice1.domain.model;
 
+
 public class BodyAuth {
     private final String username;
     private final String message;

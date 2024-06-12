@@ -1,6 +1,5 @@
 package com.pragma.microservice1.domain.model;
 
-import java.time.LocalDate;
 
 public class Role {
     private final Long id;
