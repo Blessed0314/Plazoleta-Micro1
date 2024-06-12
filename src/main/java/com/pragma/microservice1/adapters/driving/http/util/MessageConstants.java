@@ -10,7 +10,6 @@ public class MessageConstants {
     public static final String FIELD_LAST_NAME_NULL_MESSAGE = "Field 'last name' cannot be null";
     public static final String FIELD_CELLPHONE_NULL_MESSAGE = "Field 'cellphone' cannot be null";
     public static final String FIELD_CELLPHONE_ONLY_NUMBERS_MESSAGE = "Field 'Cellphone' and 'cellphone' can only have numbers";
-    public static final String FIELD_BIRTHDATE_NULL_MESSAGE = "Field 'birthdate' cannot be null";
     public static final String FIELD_ROLE_NULL_MESSAGE = "Field 'role' cannot be null";
     public static final String FIELD_EMAIL_NULL_MESSAGE = "Field 'email' cannot be null";
     public static final String FIELD_EMAIL_IS_NOT_EMAIL_MESSAGE = "Field 'email' is not in email format";

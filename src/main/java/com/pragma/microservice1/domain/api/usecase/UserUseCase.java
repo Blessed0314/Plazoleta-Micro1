@@ -1,6 +1,7 @@
 package com.pragma.microservice1.domain.api.usecase;
 
 import com.pragma.microservice1.domain.api.IUserServicePort;
+import com.pragma.microservice1.domain.exception.BirthdateNotNullException;
 import com.pragma.microservice1.domain.exception.WrongAgeException;
 import com.pragma.microservice1.domain.model.User;
 import com.pragma.microservice1.domain.spi.IUserPersistencePort;
@@ -17,16 +18,23 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public void saveUser(User user) {
-        int age = Period.between(user.getBirthdate(), LocalDate.now()).getYears();
-        if (age < 18){
+    public void saveOwnerUser(User user) {
+        if (user.getBirthdate() == null){
+            throw new BirthdateNotNullException();
+        }
+        if (Period.between(user.getBirthdate(), LocalDate.now()).getYears() < 18){
             throw new WrongAgeException();
         }
         userPersistencePort.saveUser(user);
     }
 
     @Override
-    public void saveAdmin(User user) {
-        userPersistencePort.saveAdmin(user);
+    public void saveUserNotOwner(User user) {
+        userPersistencePort.saveUser(user);
+    }
+
+    @Override
+    public void signUp(User user) {
+        userPersistencePort.signUp(user);
     }
 }

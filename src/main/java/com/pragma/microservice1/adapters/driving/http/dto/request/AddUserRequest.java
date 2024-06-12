@@ -30,7 +30,6 @@ public class AddUserRequest {
     @Pattern(regexp = "^(\\+)?\\d{1,13}$", message = MessageConstants.FIELD_CELLPHONE_ONLY_NUMBERS_MESSAGE)
     private final String cellphone;
 
-    @NotNull(message = MessageConstants.FIELD_BIRTHDATE_NULL_MESSAGE)
     private final LocalDate birthdate;
 
     @NotNull(message = MessageConstants.FIELD_ROLE_NULL_MESSAGE)

@@ -37,7 +37,7 @@ public class UserAdapter implements IUserPersistencePort {
     }
 
     @Override
-    public void saveAdmin(User user) {
+    public void signUp(User user) {
         UserEntity userEntity = userCreate(user);
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 userEntity.getUsername(), userEntity.getPassword(), userEntity.getAuthorities());

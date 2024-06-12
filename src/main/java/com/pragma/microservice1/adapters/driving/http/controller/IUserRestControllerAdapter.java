@@ -23,18 +23,24 @@ public class IUserRestControllerAdapter {
     private final IUserServicePort userServicePort;
     private final IUserRequestMapper userRequestMapper;
 
-    @PostMapping("/create")
-    @PreAuthorize("hasAnyRole('ADMIN', 'OWNER', 'EMPLOYEE')")
-    public ResponseEntity<Void> addUser(@Valid @RequestBody AddUserRequest request){
-        userServicePort.saveUser(userRequestMapper.addRequestToUser(request));
+    @PostMapping("/createOwner")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> addOwnerUser(@Valid @RequestBody AddUserRequest request){
+        userServicePort.saveOwnerUser(userRequestMapper.addRequestToUser(request));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/create_admin")
+    @PostMapping("/createEmployee")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<Void> addEmployeeUser(@Valid @RequestBody AddUserRequest request){
+        userServicePort.saveUserNotOwner(userRequestMapper.addRequestToUser(request));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/signup")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<Void> addUserAdmin(@Valid @RequestBody AddUserRequest request){
-        userServicePort.saveAdmin(userRequestMapper.addRequestToUser(request));
+    public ResponseEntity<Void> signUpUser(@Valid @RequestBody AddUserRequest request){
+        userServicePort.signUp(userRequestMapper.addRequestToUser(request));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
 }
