@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
 public class JwtUtils {
 
     @Value("${security.jwt.key.private}")
-    private String privateKey;
+    String privateKey;
 
     @Value("${security.jwt.user.generator}")
-    private String userGenerator;
+    String userGenerator;
 
-    public String createToken(Authentication authentication){
+    public String createToken(Authentication authentication, String dni){
         Algorithm algorithm = Algorithm.HMAC256(this.privateKey);
-
+        System.out.println(dni);
         String username = authentication.getPrincipal().toString();
 
         String role = authentication.getAuthorities()
@@ -40,6 +40,7 @@ public class JwtUtils {
                 .withIssuer(this.userGenerator)
                 .withSubject(username)
                 .withClaim("authorities", role)
+                .withClaim("dni", dni)
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis()+1800000))
                 .withJWTId(UUID.randomUUID().toString())

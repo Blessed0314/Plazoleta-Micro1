@@ -52,7 +52,7 @@ public class LoginUserAdapterTest {
 
         when(userRepository.findByEmailIgnoreCase(user.getEmail())).thenReturn(Optional.of(userEntity));
         when(passwordEncoder.matches(user.getPassword(), userEntity.getPassword())).thenReturn(true);
-        when(jwtUtils.createToken(authentication)).thenReturn("token123");
+        when(jwtUtils.createToken(authentication, user.getDni())).thenReturn("token123");
 
         BodyAuth bodyAuth = loginUserAdapter.loginUser(user);
 

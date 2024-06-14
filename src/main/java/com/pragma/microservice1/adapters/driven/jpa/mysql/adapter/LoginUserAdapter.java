@@ -1,5 +1,6 @@
 package com.pragma.microservice1.adapters.driven.jpa.mysql.adapter;
 
+import com.pragma.microservice1.adapters.driven.jpa.mysql.entity.UserEntity;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.UserNotFoundException;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.WrongPasswordException;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.repository.IUserRepository;
@@ -27,7 +28,8 @@ public class LoginUserAdapter implements ILoginUserPersistencePort {
         Authentication authentication = authenticate(user.getEmail(), user.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String accessToken = jwtUtils.createToken(authentication);
+        UserEntity entity = userRepository.findByEmailIgnoreCase(user.getEmail()).orElseThrow(UserNotFoundException::new);
+        String accessToken = jwtUtils.createToken(authentication, entity.getDni());
 
         return new BodyAuth(user.getEmail(), "User successfully logged in", accessToken, true);
     }

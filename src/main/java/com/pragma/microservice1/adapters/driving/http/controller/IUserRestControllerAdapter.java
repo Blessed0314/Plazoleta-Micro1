@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -42,5 +39,11 @@ public class IUserRestControllerAdapter {
     public ResponseEntity<Void> signUpUser(@Valid @RequestBody AddUserRequest request){
         userServicePort.signUp(userRequestMapper.addRequestToUser(request));
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/getRoleName")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<String> getRoleName(@RequestParam String dni){
+        return ResponseEntity.ok(userServicePort.getRoleName(dni));
     }
 }

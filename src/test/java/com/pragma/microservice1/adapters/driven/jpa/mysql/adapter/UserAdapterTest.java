@@ -6,6 +6,7 @@ import com.pragma.microservice1.adapters.driven.jpa.mysql.entity.UserEntity;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.EmailAlreadyExistsException;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.RoleNotFoundException;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.UserAlreadyExistsException;
+import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.UserNotFoundException;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.mapper.IUserEntityMapper;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.repository.IRoleRepository;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.repository.IUserRepository;
@@ -112,6 +113,27 @@ public class UserAdapterTest {
     }
 
 
+    @Test
+    void getRoleName_shouldReturnRoleName_whenUserExists() {
+        String dni = "12345678";
+        String expectedRoleName = "ADMIN";
+        UserEntity userEntity = createUserEntity();
+
+        when(userRepository.findByDni(dni)).thenReturn(Optional.of(userEntity));
+
+        String roleName = userAdapter.getRoleName(dni);
+
+        assertEquals(expectedRoleName, roleName);
+    }
+
+    @Test
+    void getRoleName_shouldThrowUserNotFoundException_whenUserDoesNotExist() {
+        String dni = "12345678";
+
+        when(userRepository.findByDni(dni)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userAdapter.getRoleName(dni));
+    }
 
     private User createUser(String dni, String email) {
         return new User("John", "Doe", dni, new Role(1L, "ADMIN", "Regular user"), "555-1234", LocalDate.now().minusYears(18), email, "password");

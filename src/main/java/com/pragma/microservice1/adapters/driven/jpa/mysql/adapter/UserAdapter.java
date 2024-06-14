@@ -3,10 +3,7 @@ package com.pragma.microservice1.adapters.driven.jpa.mysql.adapter;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.adapter.util.UserRoleValidation;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.entity.RoleEntity;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.entity.UserEntity;
-import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.EmailAlreadyExistsException;
-import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.RoleNotFoundException;
-import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.UserAlreadyExistsException;
-import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.WrongRoleException;
+import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.*;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.mapper.IUserEntityMapper;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.repository.IRoleRepository;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.repository.IUserRepository;
@@ -14,8 +11,6 @@ import com.pragma.microservice1.adapters.security.jwt.JwtUtils;
 import com.pragma.microservice1.domain.model.User;
 import com.pragma.microservice1.domain.spi.IUserPersistencePort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -39,9 +34,15 @@ public class UserAdapter implements IUserPersistencePort {
     @Override
     public void signUp(User user) {
         UserEntity userEntity = userCreate(user);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                userEntity.getUsername(), userEntity.getPassword(), userEntity.getAuthorities());
-        String token = jwtUtils.createToken(authentication);
+    }
+
+    @Override
+    public String getRoleName(String dni) {
+        Optional<UserEntity> userEntity = userRepository.findByDni(dni);
+        if (userEntity.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+        return userEntity.get().getRole().getName();
     }
 
     private UserEntity userCreate(User user) {

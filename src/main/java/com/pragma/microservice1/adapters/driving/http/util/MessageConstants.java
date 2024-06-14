@@ -1,7 +1,7 @@
 package com.pragma.microservice1.adapters.driving.http.util;
 
 public class MessageConstants {
-    private MessageConstants() {
+    MessageConstants() {
         throw new IllegalStateException("Utility class");
     }
     public static final String FIELD_DNI_NULL_MESSAGE = "Field 'DNI' cannot be null";

@@ -37,4 +37,9 @@ public class UserUseCase implements IUserServicePort {
     public void signUp(User user) {
         userPersistencePort.signUp(user);
     }
+
+    @Override
+    public String getRoleName(String dni) {
+        return userPersistencePort.getRoleName(dni);
+    }
 }
