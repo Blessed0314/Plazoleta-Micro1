@@ -29,6 +29,7 @@ public class UserEntity implements UserDetails {
     private LocalDate birthdate;
     private String email;
     private String password;
+    private String dniBoss = "";
 
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
@@ -42,21 +43,6 @@ public class UserEntity implements UserDetails {
     @Override
     public String getUsername() {
         return getEmail();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
     }
 
 }

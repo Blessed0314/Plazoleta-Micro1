@@ -2,7 +2,9 @@ package com.pragma.microservice1.adapters.driving.http.controller;
 
 
 import com.pragma.microservice1.adapters.driving.http.dto.request.AddUserRequest;
+import com.pragma.microservice1.adapters.driving.http.dto.response.UserToSmsResponse;
 import com.pragma.microservice1.adapters.driving.http.mapper.IUserRequestMapper;
+import com.pragma.microservice1.adapters.driving.http.mapper.IUserResponseMapper;
 import com.pragma.microservice1.domain.api.IUserServicePort;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class IUserRestControllerAdapter {
 
     private final IUserServicePort userServicePort;
     private final IUserRequestMapper userRequestMapper;
+    private final IUserResponseMapper userResponseMapper;
 
     @PostMapping("/createOwner")
     @PreAuthorize("hasRole('ADMIN')")
@@ -41,9 +44,11 @@ public class IUserRestControllerAdapter {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/getRoleName")
+    @GetMapping("/userdata")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<String> getRoleName(@RequestParam String dni){
-        return ResponseEntity.ok(userServicePort.getRoleName(dni));
+    public ResponseEntity<UserToSmsResponse> getSmsData(@RequestParam String dni){
+        return ResponseEntity.ok(userResponseMapper.toUserSmsResponse(
+                userServicePort.getSmsData(dni)
+        ));
     }
 }

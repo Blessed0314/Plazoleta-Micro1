@@ -26,9 +26,8 @@ public class JwtUtils {
     @Value("${security.jwt.user.generator}")
     String userGenerator;
 
-    public String createToken(Authentication authentication, String dni){
+    public String createToken(Authentication authentication, String dni, String dniBoss){
         Algorithm algorithm = Algorithm.HMAC256(this.privateKey);
-        System.out.println(dni);
         String username = authentication.getPrincipal().toString();
 
         String role = authentication.getAuthorities()
@@ -41,8 +40,9 @@ public class JwtUtils {
                 .withSubject(username)
                 .withClaim("authorities", role)
                 .withClaim("dni", dni)
+                .withClaim("boss", dniBoss)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis()+1800000))
+                .withExpiresAt(new Date(System.currentTimeMillis()+3600000))
                 .withJWTId(UUID.randomUUID().toString())
                 .withNotBefore(new Date(System.currentTimeMillis()))
                 .sign(algorithm);

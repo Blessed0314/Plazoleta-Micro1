@@ -5,5 +5,5 @@ import com.pragma.microservice1.domain.model.User;
 public interface IUserPersistencePort {
     void saveUser(User user);
     void signUp(User user);
-    String getRoleName(String dni);
+    User getSmsData(String dni);
 }

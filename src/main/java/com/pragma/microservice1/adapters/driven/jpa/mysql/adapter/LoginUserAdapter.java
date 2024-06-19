@@ -29,7 +29,7 @@ public class LoginUserAdapter implements ILoginUserPersistencePort {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserEntity entity = userRepository.findByEmailIgnoreCase(user.getEmail()).orElseThrow(UserNotFoundException::new);
-        String accessToken = jwtUtils.createToken(authentication, entity.getDni());
+        String accessToken = jwtUtils.createToken(authentication, entity.getDni(), entity.getDniBoss());
 
         return new BodyAuth(user.getEmail(), "User successfully logged in", accessToken, true);
     }

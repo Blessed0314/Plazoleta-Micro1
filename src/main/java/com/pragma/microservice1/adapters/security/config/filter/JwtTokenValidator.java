@@ -2,6 +2,7 @@ package com.pragma.microservice1.adapters.security.config.filter;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.pragma.microservice1.adapters.driven.jpa.mysql.entity.UserEntity;
 import com.pragma.microservice1.adapters.security.exception.JwtInvalidException;
 import com.pragma.microservice1.adapters.security.jwt.JwtUtils;
 import jakarta.servlet.FilterChain;
@@ -43,17 +44,20 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             jwtToken = jwtToken.substring(7);
             try {
                 DecodedJWT decodedJWT = jwtUtils.validateToken(jwtToken);
+
                 String username = jwtUtils.extractUsername(decodedJWT);
                 String stringAuthorities = jwtUtils.getSpecificClaim(decodedJWT, "authorities").asString();
-
+                String dni = jwtUtils.getSpecificClaim(decodedJWT, "dni").asString();
                 Collection<? extends GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(stringAuthorities);
 
+                UserEntity user = new UserEntity(dni, username, "", "", null, username, "", "", null);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+
                 SecurityContext context = SecurityContextHolder.getContext();
-                Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
                 context.setAuthentication(authentication);
                 SecurityContextHolder.setContext(context);
             } catch (JWTVerificationException e) {
-                // Token invalid, continue without setting authentication
+                throw new JwtInvalidException();
             }
         }
         filterChain.doFilter(request, response);

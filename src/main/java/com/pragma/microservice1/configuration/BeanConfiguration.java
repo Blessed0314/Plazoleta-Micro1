@@ -46,7 +46,7 @@ public class BeanConfiguration {
 
     @Bean
     public IUserPersistencePort userPersistencePort() {
-        return new UserAdapter(userRepository, userEntityMapper, roleRepository, jwtUtils);
+        return new UserAdapter(userRepository, userEntityMapper, roleRepository);
     }
 
     @Bean

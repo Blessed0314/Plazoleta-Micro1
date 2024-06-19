@@ -18,8 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
@@ -114,25 +112,25 @@ public class UserAdapterTest {
 
 
     @Test
-    void getRoleName_shouldReturnRoleName_whenUserExists() {
+    void getRoleName_shouldReturnDniBoss_whenUserExists() {
         String dni = "12345678";
         String expectedRoleName = "ADMIN";
         UserEntity userEntity = createUserEntity();
 
         when(userRepository.findByDni(dni)).thenReturn(Optional.of(userEntity));
 
-        String roleName = userAdapter.getRoleName(dni);
+        String roleName = userAdapter.getSmsData(dni).getRole().getName();
 
         assertEquals(expectedRoleName, roleName);
     }
 
     @Test
-    void getRoleName_shouldThrowUserNotFoundException_whenUserDoesNotExist() {
+    void getSmsData_shouldThrowUserNotFoundException_whenUserDoesNotExist() {
         String dni = "12345678";
 
         when(userRepository.findByDni(dni)).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> userAdapter.getRoleName(dni));
+        assertThrows(UserNotFoundException.class, () -> userAdapter.getSmsData(dni));
     }
 
     private User createUser(String dni, String email) {
@@ -141,7 +139,7 @@ public class UserAdapterTest {
 
     private UserEntity createUserEntity() {
         RoleEntity roleEntity = createRoleEntity();
-        return new UserEntity("12345678", "John", "Doe", "555-1234", LocalDate.now().minusYears(18), "john.doe@example.com", "encodedPassword", roleEntity);
+        return new UserEntity("12345678", "John", "Doe", "555-1234", LocalDate.now().minusYears(18), "john.doe@example.com", "encodedPassword",null, roleEntity);
     }
 
     private RoleEntity createRoleEntity() {

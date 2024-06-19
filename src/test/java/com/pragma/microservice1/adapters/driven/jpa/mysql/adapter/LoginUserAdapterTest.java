@@ -106,6 +106,6 @@ public class LoginUserAdapterTest {
         String password = "encodedPassword";
         RoleEntity role = new RoleEntity(1L, "USER", "Regular user");
 
-        return new UserEntity(dni, name, lastname, cellphone, birthdate, email, password, role);
+        return new UserEntity(dni, name, lastname, cellphone, birthdate, email, password, null, role);
     }
 }

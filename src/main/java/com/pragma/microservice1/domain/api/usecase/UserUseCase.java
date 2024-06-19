@@ -39,7 +39,7 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public String getRoleName(String dni) {
-        return userPersistencePort.getRoleName(dni);
+    public User getSmsData(String dni) {
+        return userPersistencePort.getSmsData(dni);
     }
 }

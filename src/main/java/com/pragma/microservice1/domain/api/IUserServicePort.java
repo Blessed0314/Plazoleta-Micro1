@@ -6,5 +6,5 @@ public interface IUserServicePort {
     void saveOwnerUser(User user);
     void saveUserNotOwner(User user);
     void signUp(User user);
-    String getRoleName(String dni);
+    User getSmsData(String dni);
 }

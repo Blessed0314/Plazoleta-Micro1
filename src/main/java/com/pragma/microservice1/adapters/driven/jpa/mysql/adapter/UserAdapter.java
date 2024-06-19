@@ -7,13 +7,13 @@ import com.pragma.microservice1.adapters.driven.jpa.mysql.exception.*;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.mapper.IUserEntityMapper;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.repository.IRoleRepository;
 import com.pragma.microservice1.adapters.driven.jpa.mysql.repository.IUserRepository;
-import com.pragma.microservice1.adapters.security.jwt.JwtUtils;
 import com.pragma.microservice1.domain.model.User;
 import com.pragma.microservice1.domain.spi.IUserPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class UserAdapter implements IUserPersistencePort {
     private final IUserRepository userRepository;
     private final IUserEntityMapper userEntityMapper;
     private final IRoleRepository roleRepository;
-    private final JwtUtils jwtUtils;
+
 
     private final UserRoleValidation userRoleValidation = new UserRoleValidation();
 
@@ -37,12 +37,12 @@ public class UserAdapter implements IUserPersistencePort {
     }
 
     @Override
-    public String getRoleName(String dni) {
+    public User getSmsData(String dni) {
         Optional<UserEntity> userEntity = userRepository.findByDni(dni);
         if (userEntity.isEmpty()) {
             throw new UserNotFoundException();
         }
-        return userEntity.get().getRole().getName();
+        return userEntityMapper.toModel(userEntity.get());
     }
 
     private UserEntity userCreate(User user) {
@@ -67,6 +67,9 @@ public class UserAdapter implements IUserPersistencePort {
         }
 
         UserEntity userEntity = userEntityMapper.toEntity(user);
+        if(Objects.equals(existingRole.get().getName(), "EMPLOYEE")){
+            userEntity.setDniBoss(userRoleValidation.getBossDni());
+        }
         userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(userEntity);
     }
